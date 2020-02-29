@@ -69,9 +69,11 @@ chrome的版本可以在chrome 右上角三个点 -> 设置 -> 关于chrome 中�
 ## 运行爬虫代码
 
 1. 创建一个你可以找到路径的文件夹
+
 2. 在命令行中，访问该文件夹 
     - Win系统下，[CMD如何切换目录](https://jingyan.baidu.com/article/425e69e6918df1be15fc1695.html)
     - MacOS系统下，[mac怎么使用终端cd到这个目录下的命令](https://zhidao.baidu.com/question/1240910514944666059.html)
+    
 
 3. 跳转到你的文件夹之后，在命令行中运行以下代码，就把远程仓库中的爬虫代码克隆到你的电脑上啦~
 
