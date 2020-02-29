@@ -1,0 +1,30 @@
+.xls-list {
+    padding: 20px 100px;
+    margin: 0;
+}
+
+ol {
+    padding-left: 20px;
+}
+
+li {
+    border-top: 1px solid #ccc;
+}
+
+li p label{
+    margin-right: 10px;
+}
+
+li p b {
+    margin-left: 10px;
+    margin-right: 50px;
+}
+
+a {
+    color: #5b9bc9;
+    text-decoration: none;
+}
+
+a:hover {
+    color: #40c99f;
+}
