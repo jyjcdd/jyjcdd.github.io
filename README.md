@@ -65,3 +65,42 @@ chrome的版本可以在chrome 右上角三个点 -> 设置 -> 关于chrome 中�
 至此，如果一切进展顺利，我们就成功完成了爬虫运行环境的配置工作。
 
 接下来就是指使小蜘蛛为我们爬取微博数据的时候啦~
+
+## 运行爬虫代码
+
+1. 创建一个你可以找到路径的文件夹
+2. 在命令行中，访问该文件夹 
+    - Win系统下，[CMD如何切换目录](https://jingyan.baidu.com/article/425e69e6918df1be15fc1695.html)
+    - MacOS系统下，[mac怎么使用终端cd到这个目录下的命令](https://zhidao.baidu.com/question/1240910514944666059.html)
+
+3. 跳转到你的文件夹之后，在命令行中运行以下代码，就把远程仓库中的爬虫代码克隆到你的电脑上啦~
+
+        git clone git@github.com:jyjcdd/jyjcdd.github.io.git
+
+4. 进入爬虫代码文件夹
+
+        cd jyjcdd.github.io
+
+5. 在命令行中输入代码运行爬虫
+
+    ⚠️ 如果你之前没有接触过代码，请先看代码解释！
+
+        python weiboExcel.py jydd 2020 01 6 [uername] [password]
+
+    **⚠️ 代码解释：**
+    `python weiboExcel.py` 代表用`python`运行`weiboExcel.py`文件
+
+    `jydd` 代表你要抓取的范围，现有范围为: 
+
+        jydd — 就业大队 | xqxz — 消歧小组 | hwzs — 海外之声
+
+    `2020` `01` 代表你要抓取的年份和月份
+    
+    `6` 代表当前这个月所发微博的页数，需要到微博查看
+
+    `[username] [password]` 是大队的微博登录账号和密码
+
+
+如果一切进展顺利，爬虫将会开始执行代码，然后爬取微博数据啦~
+
+如果进展不顺利，那就多拜拜雍正让他治一治bug吧~

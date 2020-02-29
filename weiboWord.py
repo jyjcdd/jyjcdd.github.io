@@ -7,6 +7,7 @@ from selenium import webdriver
 import time
 import os
 import re
+import sys
 from docx import Document
 from docx.oxml.ns import qn
 
@@ -19,15 +20,15 @@ class Weibo_spider:
         'hwzs': '海外之声'
     }
 
-    def __init__(self, word_type, year, month, page):
+    def __init__(self, word_type, year, month, page, username, password):
         page = int(page)
         year = str(year)
         if len(month) == 1:
             month = '0' + str(month)
 
         # 账户信息
-        self.username = 'weibo-username'
-        self.password = 'weibo-password'
+        self.username = username
+        self.password = password
         # 页面信息
         self.homeUrl = 'https://weibo.com/u/5327831786/home'
         self.baseUrl = f'https://weibo.com/5327831786/profile?is_all=1&stat_date={year}{month}'
@@ -283,6 +284,12 @@ class Weibo_spider:
 # 第一个参数是要抓取数据的对应缩写
 # 第二、三个参数是抓取的年份、月份
 # 第三个参数是一共的页数（到微博查看）
-ws = Weibo_spider('hwzs', '2020', '01', '6')
+spider_type = sys.argv[1]
+year = sys.argv[2]
+month = sys.argv[3]
+page = sys.argv[4]
+username = sys.argv[5]
+password = sys.argv[6]
+ws = Weibo_spider(spider_type, year, month, page, username, password)
 ws.spider_data()
 print('Done')
