@@ -2,6 +2,7 @@
 
 ## 配置爬虫运行环境
 想要运行爬虫的代码，需要先在电脑上配置好运行环境，最首要的是安装Python:
+
 ⚠️安装Python的版本一定要3.x
 
 - [安装Python](https://www.liaoxuefeng.com/wiki/1016959663602400/1016959856222624)
@@ -41,6 +42,7 @@
 - [chromedirver下载地址](http://npm.taobao.org/mirrors/chromedriver/)
 
 找到你电脑中chrome对应的版本下载，若非对应版本有一定几率会报错。
+
 chrome的版本可以在chrome 右上角三个点 -> 设置 -> 关于chrome 中查看。
 
 下载完成后，需要将chromedriver放到系统可以找到的路径下，  
@@ -56,4 +58,5 @@ chrome的版本可以在chrome 右上角三个点 -> 设置 -> 关于chrome 中�
 然后将下载好的chromedriver文件拖入到此目录下。
 
 至此，如果一切进展顺利，我们就成功完成了爬虫运行环境的配置工作。
+
 接下来就是指使小蜘蛛为我们爬取微博数据的时候啦~

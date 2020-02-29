@@ -3,6 +3,9 @@ import xlrd
 
 class Xls2HTML:
     def __init__(self, xlsfile, year, month, filetype):
+        if len(month) == 1:
+            month = '0' + str(month)
+
         self.xlsfile = xlsfile
         self.year = year
         self.month = month
@@ -38,26 +41,18 @@ class Xls2HTML:
         self.htmlfile.write("<li>")
 
         for colNum in range(ncols):
-            if colNum > 0:
-                if colNum == 1 or colNum == 6:
+            if colNum > 0 and rowVale[colNum]:
+                if colNum == 3:
                     self.htmlfile.write(
-                        f'<p><label>{self.headCol[colNum]}:<b>{rowVale[colNum]}</b></label>')
-                elif colNum == 2 or colNum == 7 or colNum == 8:
-                    self.htmlfile.write(
-                        f'<label>{self.headCol[colNum]}:<b>{rowVale[colNum]}</b></label>')
-                elif colNum == 3:
-                    self.htmlfile.write(
-                        f'<label>{self.headCol[colNum]}:</label><a href="{rowVale[colNum]}">原微博链接</a></p>')
-                elif colNum == 9:
-                    self.htmlfile.write(
-                        f'<label>{self.headCol[colNum]}:<b>{rowVale[colNum]}</b></label></p>')
-                elif colNum == 4 or colNum == 5:
-                    self.htmlfile.write(
-                        f'<p><label>{self.headCol[colNum]}:</label>{str(rowVale[colNum])}</p>')
-                elif colNum == 10:
-                    self.htmlfile.write(f'<p>{self.headCol[colNum]}:<br/>')
-                    comment = str(rowVale[colNum]).replace('\n', '<br/>')
-                    self.htmlfile.write(f'{comment}</p>')
+                        f'<p><label>{self.headCol[colNum]}:</label><a href="{rowVale[colNum]}">原微博链接</a></p>')
+                else:
+                    if self.headCol[colNum] == '评论内容':
+                        self.htmlfile.write(f'<p>{self.headCol[colNum]}:<br/>')
+                        comment = str(rowVale[colNum]).replace('\n', '<br/>')
+                        self.htmlfile.write(f'{comment}</p>')
+                    else:
+                        self.htmlfile.write(
+                            f'<p><label>{self.headCol[colNum]}:{rowVale[colNum]}</label>')
 
         self.htmlfile.write("</li>")
 
@@ -85,5 +80,10 @@ class Xls2HTML:
 # 第一个参数：需要进行转换的文件名
 # 第二个参数：数据对应的年份
 # 第三个参数：数据对应的月份
-xh = Xls2HTML('data/2020/1月/海外之声微博2020年01月数据.xls', '2020', '01', 'hwzs')
+# 就业大队 jydd
+# 消歧小组 xqxz
+# 海外之声 hwzs
+year = '2019'
+month = '11'
+xh = Xls2HTML(f'data/{year}/{month}月/就业大队微博{year}年{month}月数据.xls', f'{year}', f'{month}', 'jydd')
 xh.xls2html()
