@@ -78,13 +78,11 @@ chrome的版本可以在chrome 右上角三个点 -> 设置 -> 关于chrome 中�
 
 4. 在命令行中跳转到你解压的爬虫文件中
 
-    cd jyjcdd.github.io-master
-
-如何在命令行中跳转到指定目录:
-- Win系统下，[CMD如何切换目录](https://jingyan.baidu.com/article/425e69e6918df1be15fc1695.html)
-
-- MacOS系统下，[mac怎么使用终端cd到这个目录下的命令](https://zhidao.baidu.com/question/1240910514944666059.html)
+       cd jyjcdd.github.io-master
+       
+    Win系统下，[CMD如何切换目录](https://jingyan.baidu.com/article/425e69e6918df1be15fc1695.html)
     
+    MacOS系统下，[mac怎么使用终端cd到这个目录下的命令](https://zhidao.baidu.com/question/1240910514944666059.html)
 
 5. 在命令行中输入代码运行爬虫
 
