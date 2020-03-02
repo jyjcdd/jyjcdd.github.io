@@ -68,26 +68,33 @@ chrome的版本可以在chrome 右上角三个点 -> 设置 -> 关于chrome 中�
 
 ## 运行爬虫代码
 
-1. 创建一个你可以找到路径的文件夹
+1. 在浏览器中打开链接
 
-2. 在命令行中，访问该文件夹 
-    - Win系统下，[CMD如何切换目录](https://jingyan.baidu.com/article/425e69e6918df1be15fc1695.html)
-    - MacOS系统下，[mac怎么使用终端cd到这个目录下的命令](https://zhidao.baidu.com/question/1240910514944666059.html)
+    https://github.com/jyjcdd/jyjcdd.github.io
+
+2. 找到 `Clone or download` 按钮点击，在弹窗中找到 `Download ZIP`，点击下载文件
+
+3. 解压下载的ZIP文件
+
+4. 在命令行中跳转到你解压的爬虫文件中
+
+    cd jyjcdd.github.io-master
+
+如何在命令行中跳转到指定目录:
+- Win系统下，[CMD如何切换目录](https://jingyan.baidu.com/article/425e69e6918df1be15fc1695.html)
+
+- MacOS系统下，[mac怎么使用终端cd到这个目录下的命令](https://zhidao.baidu.com/question/1240910514944666059.html)
     
-
-3. 跳转到你的文件夹之后，在命令行中运行以下代码，就把远程仓库中的爬虫代码克隆到你的电脑上啦~
-
-        git clone git@github.com:jyjcdd/jyjcdd.github.io.git
-
-4. 进入爬虫代码文件夹
-
-        cd jyjcdd.github.io
 
 5. 在命令行中输入代码运行爬虫
 
     ⚠️ 如果你之前没有接触过代码，请先看代码解释！
 
         python weiboExcel.py jydd 2020 01 6 [uername] [password]
+    
+    如果电脑中同时存在Python 2.x和3.x 则将上述代码改为：
+
+        python3 weiboExcel.py jydd 2020 01 6 [uername] [password]
 
     **⚠️ 代码解释：**
     `python weiboExcel.py` 代表用`python`运行`weiboExcel.py`文件
@@ -106,3 +113,10 @@ chrome的版本可以在chrome 右上角三个点 -> 设置 -> 关于chrome 中�
 如果一切进展顺利，爬虫将会开始执行代码，然后爬取微博数据啦~
 
 如果进展不顺利，那就多拜拜雍正让他治一治bug吧~
+
+## 下载爬虫数据文件
+
+1. 逐级访问data下的文件夹，直到找到你想下载的爬虫数据文件
+
+2. 点击该文件，找到 `Download` 按钮，点击即可下载该文件
+
