@@ -84,6 +84,6 @@ class Xls2HTML:
 # 消歧小组 xqxz
 # 海外之声 hwzs
 year = '2020'
-month = '02'
-xh = Xls2HTML(f'data/{year}/{month}/海外之声微博{year}年{month}月数据.xls', f'{year}', f'{month}', 'hwzs')
+month = '03'
+xh = Xls2HTML(f'data/{year}/{month}/就业大队微博{year}年{month}月数据.xls', f'{year}', f'{month}', 'jydd')
 xh.xls2html()

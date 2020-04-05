@@ -36,11 +36,11 @@
 
 依然是在命令行中，输入以下代码：
 
-    pip install xlwt xlrd xlutils docx
+    pip install xlwt xlrd xlutils python-docx
 
 如果电脑中同时存在Python 2.x和3.x 则将上述代码改为：
 
-    pip3 install xlwt xlrd xlutils docx
+    pip3 install xlwt xlrd xlutils python-docx
 
 
 安装完爬虫依赖的库文件后，我们还需要安装 Chrome驱动：
