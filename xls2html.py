@@ -1,4 +1,5 @@
 import xlrd
+import sys
 
 
 class Xls2HTML:
@@ -77,13 +78,17 @@ class Xls2HTML:
         self.xls_template_close()
 
 
-# 第一个参数：需要进行转换的文件名
-# 第二个参数：数据对应的年份
-# 第三个参数：数据对应的月份
+# 第一个参数：数据对应的年份
+# 第二个参数：数据对应的月份
+# 第三个参数：需要进行转换的文件名缩写
+# 第四个参数：需要进行转换的文件名
 # 就业大队 jydd
 # 消歧小组 xqxz
 # 海外之声 hwzs
-year = '2020'
-month = '03'
-xh = Xls2HTML(f'data/{year}/{month}/就业大队微博{year}年{month}月数据.xls', f'{year}', f'{month}', 'jydd')
+year = sys.argv[1]
+month = sys.argv[2]
+spider_type = sys.argv[3]
+type_text = sys.argv[4]
+xh = Xls2HTML(f'data/{year}/{month}/{type_text}微博{year}年{month}月数据.xls', f'{year}', f'{month}', f'{spider_type}')
 xh.xls2html()
+print('Done')
