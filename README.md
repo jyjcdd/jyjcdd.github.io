@@ -73,46 +73,107 @@ chrome的版本可以在chrome 右上角三个点 -> 设置 -> 关于chrome 中�
 
 接下来就是指使小蜘蛛为我们爬取微博数据的时候啦~
 
-## 运行爬虫代码
+## 配置GitHub和ssh
+⚠️ 此部分是拉取项目和提交项目的必备步骤，一定要正确完成才能进行后续操作
 
-1. 在浏览器中打开链接
+Ps：此部分需要学习一些关于GitHub和ssh的知识，但是别担心，如果你看见这俩词很懵，那你就想想拉💩：蹲坑 -> 用力 -> 擦屁股。它们不过是坑和纸，用来达成你新陈代谢的目的。所以即使你弄不懂它们是啥，也一样可以完成你上传代码的目的。
 
-    https://github.com/jyjcdd/jyjcdd.github.io
+这里有一篇浅显易懂的[博客](https://www.liaoxuefeng.com/wiki/896043488029600/896954117292416)，如果你感兴趣点开了，可以认真看一下“远程仓库”和“添加远程库”这两节，如果不感兴趣，就照着下面的步骤做就好，我们一样能到达盥洗室。
 
-2. 找到 `Clone or download` 按钮点击，在弹窗中找到 `Download ZIP`，点击下载文件
+1. 在浏览器中访问就业大队的仓库地址→[https://github.com/jyjcdd/jyjcdd.github.io](https://github.com/jyjcdd/jyjcdd.github.io)
+2. 此时你多半是没有登录的状态，那么接着点击右上角的`Sign In`
+3. 此时输入就业大队仓库的账号密码（⚠️ 与楼楼私聊获得）
 
-3. 解压下载的ZIP文件
+到此，你得是仓库主人的身份访问就业大队仓库地址，如果不是，请检查上述步骤是否有误
 
-4. 在命令行中跳转到你解压的爬虫文件中
+4. 点击`Settings`
+5. 在此页面左侧导航栏找到`Deploy keys`狠狠的点击它（只要你的手指别弄疼就行
+6. 在这个页面上，你可以很容易看见一个`Add deploy key`按钮，对，点它
 
-       cd jyjcdd.github.io-master
+OK，我们到这都很顺利，稍微简单的回过头去说一下，这个网站就是`GitHub`，而这个页面里面我们需要添加的key就是`ssh key`，我们怎么添加它呢？它在哪呢？你如果这时有了兴趣，那么这篇[博客](https://www.liaoxuefeng.com/wiki/896043488029600/896954117292416)你完全可以点开看一看👍如果你依然不感兴趣，没关系，咱们接着往下看。
+
+7. 在命令行中，输入以下代码
+
+        ssh-keygen -t rsa -C "youremail@example.com"
+
+    ⚠️将 `youremail@example.com` 替换为你的真实邮箱。
+    代码不做解释了，那篇[博客](https://www.liaoxuefeng.com/wiki/896043488029600/896954117292416)里面有，你去看看就知道。
+
+8. 然后一路回车，使用默认值即可
+9. 打开`.ssh`文件夹
+    - 如果你是MacOS系统，在命令行中输入以下代码
+    
+            cd ~/.ssh
+            open .
+    
+    - 如果你是Win系统，在文件夹中切换到C盘 -> Users -> Administrator -> .ssh
+10. 打开`id_rsa.pub`文件
+    - 如果你是MacOS系统，在命令行中输入以下代码
+
+            cat id_rsa.pub
+
+    - 如果你是Win系统，双击`id_rsa.pub`文件
+
+哎呀，费可大劲，终于搞到了，这`id_rsa.pub`文件中的内容就是我们的`ssh key`呀~
+
+11. 将`id_rsa.pub`文件内容拷贝
+12. 回到我们刚刚的`Deploy keys`页面里面，将拷贝内容放入`Key`下面的输入框中
+13. 给你的`ssh key`任意命名，只要你知道那是你的`key`而不至于被楼楼误删，然后放入到Title下的输入框里面
+14. 点击`Allow write access`
+
+啊，让我们暂停几秒钟，享受这即将成功的美妙时刻~
+
+15. 点击`Add Key`
+
+如果不出意外，列表中将会有你的`ssh key`躺在那里。
+欢呼雀跃！但是别高兴太早，我们只是完成了准备工作...不过还是可以小小开心一下，因为我们完成了最麻烦的部分了~接下来的部分肯定也能顺利，搞定它！
+
+## 获取爬虫代码
+现在进入爬虫最核心的部分，拉取爬虫项目到本地，这样才能让我们在本地完成爬虫的操作。
+
+1. 在浏览器中访问就业大队的仓库地址→[https://github.com/jyjcdd/jyjcdd.github.io](https://github.com/jyjcdd/jyjcdd.github.io)
+2. 期望你是登录状态，如果不是那就`Sign In`
+
+确保登录状态，如果不是，请检查上述步骤。
+
+4. 找到 `Clone or download` 按钮点击
+
+3. 在弹窗中找到那一行输入框右侧的按钮，点击它会复制当前仓库链接
+
+4. 打开命令行，依次输入以下命令
+
+        git clone git@github.com:jyjcdd/jyjcdd.github.io.git
+        cd jyjcdd.github.io
        
     Win系统下，[CMD如何切换目录](https://jingyan.baidu.com/article/425e69e6918df1be15fc1695.html)
     
     MacOS系统下，[mac怎么使用终端cd到这个目录下的命令](https://zhidao.baidu.com/question/1240910514944666059.html)
 
-5. 在命令行中输入代码运行爬虫
+至此，我们的爬虫项目就完整的躺在我们电脑里，等待我们用它去爬取微博的数据啦~
 
-    ⚠️ 如果你之前没有接触过代码，请先看代码解释！
+## 运行爬虫代码
+完成了以上准备工作，我们在命令行中输入代码运行爬虫
 
-        python weiboExcel.py jydd 2020 01 6 [uername] [password]
-    
-    如果电脑中同时存在Python 2.x和3.x 则将上述代码改为：
+⚠️ 如果你之前没有接触过代码，请先看代码解释！
 
-        python3 weiboExcel.py jydd 2020 01 6 [uername] [password]
+    python weiboExcel.py jydd 2020 01 6 [uername] [password]
 
-    **⚠️ 代码解释：**
-    `python weiboExcel.py` 代表用`python`运行`weiboExcel.py`文件
+如果电脑中同时存在Python 2.x和3.x 则将上述代码改为：
 
-    `jydd` 代表你要抓取的范围，现有范围为: 
+    python3 weiboExcel.py jydd 2020 01 6 [uername] [password]
 
-        jydd — 就业大队 | xqxz — 消歧小组 | hwzs — 海外之声
+**⚠️ 代码解释：**
+`python weiboExcel.py` 代表用`python`运行`weiboExcel.py`文件
 
-    `2020` `01` 代表你要抓取的年份和月份
-    
-    `6` 代表当前这个月所发微博的页数，需要到微博查看
+`jydd` 代表你要抓取的范围，现有范围为: 
 
-    `[username] [password]` 是大队的微博登录账号和密码
+    jydd — 就业大队 | xqxz — 消歧小组 | hwzs — 海外之声
+
+`2020` `01` 代表你要抓取的年份和月份
+
+`6` 代表当前这个月所发微博的页数，需要到微博查看
+
+`[username] [password]` 是大队的微博登录账号和密码
 
 
 如果一切进展顺利，爬虫将会开始执行代码，然后爬取微博数据啦~
@@ -149,68 +210,13 @@ chrome的版本可以在chrome 右上角三个点 -> 设置 -> 关于chrome 中�
 5. 将你刚刚转化生成的文件添加到`summary.html`中，按照格式只需要改动月份，最多再加一个年份，跟你刚刚抓取的数据对应上就好
 
 ## 上传爬虫数据
-⚠️ 此部分需要学习一些关于GitHub和ssh的知识
-
-Ps：但是别担心，如果你看见这俩词很懵，那你就想想拉💩：蹲坑 -> 用力 -> 擦屁股。它们不过是坑和纸，用来达成你新陈代谢的目的。所以即使你弄不懂它们是啥，也一样可以完成你上传代码的目的。
-
-这里有一篇浅显易懂的[博客](https://www.liaoxuefeng.com/wiki/896043488029600/896954117292416)，如果你感兴趣点开了，可以认真看一下“远程仓库”和“添加远程库”这两节，如果不感兴趣，就照着下面的步骤做就好，我们一样能到达盥洗室。
-
-1. 在浏览器中访问就业大队的仓库地址→[https://github.com/jyjcdd/jyjcdd.github.io](https://github.com/jyjcdd/jyjcdd.github.io)
-2. 此时你多半是没有登录的状态，那么接着点击右上角的`Sign In`
-
-此时输入就业大队仓库的账号密码（⚠️ 与楼楼私聊获得）
-
-3. 到此，你得是仓库主人的身份访问就业大队仓库地址，如果不是，请检查上述步骤是否有误
-4. 点击`Settings`
-5. 在此页面左侧导航栏找到`Deploy keys`狠狠的点击它（只要你的手指别弄疼就行
-6. 在这个页面上，你可以很容易看见一个`Add deploy key`按钮，对，点它
-
-OK，我们到这都很顺利，稍微简单的回过头去说一下，这个网站就是`GitHub`，而这个页面里面我们需要添加的key就是`ssh key`，我们怎么添加它呢？它在哪呢？你如果这时有了兴趣，那么这篇[博客](https://www.liaoxuefeng.com/wiki/896043488029600/896954117292416)你完全可以点开看一看👍如果你依然不感兴趣，没关系，咱们接着往下看。
-
-7. 在命令行中，输入以下代码
-
-        ssh-keygen -t rsa -C "youremail@example.com"
-
-    ⚠️将 `youremail@example.com` 替换为你的真实邮箱。
-    代码不做解释了，那篇[博客](https://www.liaoxuefeng.com/wiki/896043488029600/896954117292416)里面有，你去看看就知道。
-
-8. 然后一路回车，使用默认值即可
-9. 打开`.ssh`文件夹
-    - 如果你是MacOS系统，在命令行中输入以下代码
-    
-        cd ~/.ssh
-        open .
-    
-    - 如果你是Win系统，在文件夹中切换到C盘 -> Users -> Administrator -> .ssh
-10. 打开`id_rsa.pub`文件
-    - 如果你是MacOS系统，在命令行中输入以下代码
-
-        cat id_rsa.pub
-
-    - 如果你是Win系统，双击`id_rsa.pub`文件
-
-哎呀，费可大劲，终于搞到了，这`id_rsa.pub`文件中的内容就是我们的`ssh key`呀~
-
-11. 将`id_rsa.pub`文件内容拷贝
-12. 回到我们刚刚的`Deploy keys`页面里面，将拷贝内容放入`Key`下面的输入框中
-13. 给你的`ssh key`任意命名，只要你知道那是你的`key`而不至于被楼楼误删，然后放入到Title下的输入框里面
-14. 点击`Allow write access`
-
-啊，让我们暂停几秒钟，享受这即将成功的美妙时刻~
-
-15. 点击`Add Key`
-
-如果不出意外，列表中将会有你的`ssh key`躺在那里。欢呼雀跃，但是别高兴太早，我们只是完成了准备工作...不过还是可以小小开心一下，因为我们完成了一大半了~接下来一鼓作气，搞定它！
-
-回到我们的爬虫项目，在命令行里切到该项目的目录下。
-
-16. 将代码提交到远程仓库，在命令行中输入以下代码
+我们在本地完成了爬虫等一系列高难度操作之后，必须要将代码提交到远程仓库，才能方便其他同学能够同步你的工作进度，坚持一下，这是最后也是最关键的一步，在命令行中输入以下代码
 
     git add .
     git commit -m "202004微博数据" 
     git push origin master
 
-    将 `202004微博数据` 按当前数据的年月替换掉
+将 `202004微博数据` 按当前数据的年月替换掉
 
 如果顺利你将会看见类似这样的提示出现在命令行中，
 
@@ -224,3 +230,5 @@ OK，我们到这都很顺利，稍微简单的回过头去说一下，这个网
     0ea9861..d526266  master -> master
 
 恭喜恭喜，你真的完全成功啦！~ ✿✿ヽ(°▽°)ノ✿
+
+我们可以访问[https://jyjcdd.github.io/](https://jyjcdd.github.io/)看看你辛劳的成果啦~
