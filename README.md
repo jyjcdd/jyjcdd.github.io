@@ -206,5 +206,21 @@ OK，我们到这都很顺利，稍微简单的回过头去说一下，这个网
 
 16. 将代码提交到远程仓库，在命令行中输入以下代码
 
+    git add .
+    git commit -m "202004微博数据" 
+    git push origin master
 
+    将 `202004微博数据` 按当前数据的年月替换掉
 
+如果顺利你将会看见类似这样的提示出现在命令行中，
+
+    Counting objects: 20, done.
+    Delta compression using up to 4 threads.
+    Compressing objects: 100% (20/20), done.
+    Writing objects: 100% (20/20), 549.23 KiB | 1.10 MiB/s, done.
+    Total 20 (delta 8), reused 0 (delta 0)
+    remote: Resolving deltas: 100% (8/8), completed with 6 local objects.
+    To jyjcdd:jyjcdd/jyjcdd.github.io.git
+    0ea9861..d526266  master -> master
+
+恭喜恭喜，你真的完全成功啦！~ ✿✿ヽ(°▽°)ノ✿
