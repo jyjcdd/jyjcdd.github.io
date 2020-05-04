@@ -8,6 +8,7 @@ import time
 import os
 import re
 import sys
+import datetime
 from xlwt import Workbook
 from xlrd import open_workbook
 from xlutils.copy import copy
@@ -30,7 +31,7 @@ class Weibo_spider:
         'hwzs': '海外之声'
     }
 
-    def __init__(self, excel_type, year, month, page, username, password):
+    def __init__(self, excel_type, year, month, page, username, password, instance):
         page = int(page)
         year = str(year)
         if len(month) == 1:
@@ -40,16 +41,22 @@ class Weibo_spider:
         self.username = username
         self.password = password
         # 页面信息
-        self.homeUrl = 'https://weibo.com/u/5327831786/home'
-        self.baseUrl = f'https://weibo.com/5327831786/profile?is_all=1&stat_date={year}{month}'
+        if instance == 'xcjb':
+            # 消除家暴
+            self.homeUrl = 'https://weibo.com/u/7400325540/home'
+            self.baseUrl = f'https://weibo.com/7400325540/profile?is_all=1&stat_date={year}{month}'
+        else:
+            self.homeUrl = 'https://weibo.com/u/5327831786/home'
+            self.baseUrl = f'https://weibo.com/5327831786/profile?is_all=1&stat_date={year}{month}'
+
         self.totalPageNum = page
         # 内容关键字
-        if excel_type == 'jydd':
-            self.keyWord = ''
-        elif excel_type == 'xqxz':
+        if excel_type == 'xqxz':
             self.keyWord = '#消除就业性别歧视##粉丝投稿#'
         elif excel_type == 'hwzs':
             self.keyWord = f'海外之声 {year}.{month}'
+        elif excel_type == 'jydd':
+            self.keyWord = ''
 
         # 爬虫
         self.driver = webdriver.Chrome()
@@ -150,11 +157,15 @@ class Weibo_spider:
             next_height = self.driver.execute_script(scroll_height_js)
             try:
                 # 比较滚动前后高度 若已经到底最退出循环
-                if self.driver.find_element_by_css_selector('.page.prev').text == '上一页':
+                pre_text = self.driver.find_element_by_css_selector(
+                    '.page.prev').text
+                if pre_text == '上一页' or pre_text == '上一頁':
                     break
             except:
                 try:
-                    if self.driver.find_element_by_css_selector('.page.next').text == '下一页':
+                    next_text = self.driver.find_element_by_css_selector(
+                        '.page.next').text
+                    if next_text == '下一页' or next_text == '下一頁':
                         break
                 except:
                     pass
@@ -183,8 +194,23 @@ class Weibo_spider:
         ele_time = ele.find_element_by_css_selector(
             '.WB_from [node-type="feed_list_item_date"]')
         date_list = ele_time.text.split(' ')
-        self.cur_data.append(date_list[0])  # 日期
-        self.cur_data.append(date_list[1])  # 时间
+        # 尝试获取日期和时间，若报错，则代表是 今天且是一小时内
+        try:
+            if date_list[0] == '今天':
+                today = datetime.date.today()
+                self.cur_data.append(f'{today.month}月{today.day}日')
+            else:
+                self.cur_data.append(date_list[0])  # 日期
+
+            self.cur_data.append(date_list[1])  # 时间
+        except:
+            today = datetime.date.today()
+            self.cur_data.append(f'{today.month}月{today.day}日')  # 日期
+            mins = int(date_list[0].split('分')[0])
+            self.cur_data.append((
+                datetime.datetime.now() - datetime.timedelta(minutes=mins)
+            ).strftime('%H:%M'))  # 时间
+
         # 获取微博链接
         full_text_href = ele_time.get_attribute('href')
         self.cur_data.append(full_text_href)
@@ -461,6 +487,13 @@ month = sys.argv[3]
 page = sys.argv[4]
 username = sys.argv[5]
 password = sys.argv[6]
-ws = Weibo_spider(spider_type, year, month, page, username, password)
+# 不同的账号主体
+# 默认为就业大队，现阶段也可能为 消除家暴
+try:
+    instance = sys.argv[7]
+except:
+    instance = ''
+
+ws = Weibo_spider(spider_type, year, month, page, username, password, instance)
 ws.spider_data()
 print('Done')
