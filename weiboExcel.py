@@ -437,6 +437,7 @@ class Weibo_spider:
     def spider_data(self):
         # 登录
         self.login()
+        time.sleep(5)
         while self.totalPageNum >= 1:
             print('page:', self.totalPageNum)
             # 访问网页
