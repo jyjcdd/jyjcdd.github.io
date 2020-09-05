@@ -80,7 +80,7 @@ class Weibo_spider:
         # 访问微博首页
         self.driver.implicitly_wait(10)
         self.driver.get('https://weibo.com')
-        time.sleep(5)
+        time.sleep(7)
         # 登录账号
         user_input = self.driver.find_element_by_id('loginname')
         user_input.send_keys(self.username)
