@@ -297,27 +297,31 @@ class Weibo_spider:
             self.cur_data.append( full_text_list[0])
             #来源 翻译
             full_text_blankLine = full_text_list[1].split('\n\n')
-            if full_text_blankLine[-1][0]=='（' and full_text_blankLine[-1][-2]=="）":
+            if full_text_blankLine[-1][0] == '（' and full_text_blankLine[-1][-2] == '）':
                 self.cur_data.append( '\n\n'.join(full_text_blankLine[0:-1]))
                 try:
                     full_text_blankLine[-1].index('；')
                     full_text_originAndTrans = full_text_blankLine[-1].split('；')
                     for item in full_text_originAndTrans:
                         name,con = item.split('：')
-                        self.cur_data.append(con.replace('）',''))
+                        self.cur_data.append(con.replace('）','').replace('\n', '').replace('\r', ''))
                 except:
                     try:
-                        full_text.index('来源')
+                        full_text_blankLine[-1].index('来源')
                         full_text_origin = full_text_blankLine[-1].split('：')[1]
-                        self.cur_data.append(full_text_origin.replace('）',''))
+                        self.cur_data.append(full_text_origin.replace('）','').replace('\n', '').replace('\r', ''))
                         self.cur_data.append('无')
                     except:
                         self.cur_data.append('无')
                         full_text_trans = full_text_blankLine[-1].split('：')[1]
-                        self.cur_data.append(full_text_trans.replace('）',''))
+                        self.cur_data.append(full_text_trans.replace('）','').replace('\n', '').replace('\r', ''))
+            else:
+                self.cur_data.append( full_text_list[1])
+                self.cur_data.append('无')
+                self.cur_data.append('无')
+                
                 
             
-
         elif self.excelType == 'jydd':
             try:
                 expand_ele = ele.find_element_by_css_selector('.WB_expand')
