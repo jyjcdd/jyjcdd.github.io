@@ -21,8 +21,8 @@ class Weibo_spider:
         'jydd': '序号 发布日期 发布时间 微博链接 内容 阅读量 转发 评论 点赞 评论内容',
         # 消歧小组
         'xqxz': '序号 发布日期 发布时间 微博链接 招录单位 招聘岗位 岗位要求 招聘链接 阅读量 转发 评论 点赞 评论内容',
-        # 海外之声
-        'hwzs': '序号 发布日期 发布时间 微博链接 国家 内容 阅读量 转发 评论 点赞 评论内容'
+        # 海外之声 （新增 来源 翻译
+        'hwzs': '序号 发布日期 发布时间 微博链接 国家 内容 来源 翻译 阅读量 转发 评论 点赞 评论内容'
     }
     # Excel文件名
     excelName = {
@@ -294,8 +294,29 @@ class Weibo_spider:
         elif self.excelType == 'hwzs':
             full_text_list = full_text.split('【')[1]
             full_text_list = full_text_list.split('】')
-            self.cur_data.append(full_text_list[0])
-            self.cur_data.append(full_text_list[1])
+            self.cur_data.append( full_text_list[0])
+            #来源 翻译
+            full_text_blankLine = full_text_list[1].split('\n\n')
+            if full_text_blankLine[-1][0]=='（' and full_text_blankLine[-1][-2]=="）":
+                self.cur_data.append( '\n\n'.join(full_text_blankLine[0:-1]))
+                try:
+                    full_text_blankLine[-1].index('；')
+                    full_text_originAndTrans = full_text_blankLine[-1].split('；')
+                    for item in full_text_originAndTrans:
+                        name,con = item.split('：')
+                        self.cur_data.append(con.replace('）',''))
+                except:
+                    try:
+                        full_text.index('来源')
+                        full_text_origin = full_text_blankLine[-1].split('：')[1]
+                        self.cur_data.append(full_text_origin.replace('）',''))
+                        self.cur_data.append('无')
+                    except:
+                        self.cur_data.append('无')
+                        full_text_trans = full_text_blankLine[-1].split('：')[1]
+                        self.cur_data.append(full_text_trans.replace('）',''))
+                
+            
 
         elif self.excelType == 'jydd':
             try:
