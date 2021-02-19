@@ -15,7 +15,7 @@ class Xls2HTML:
             'xqxz': '消歧小组',
             'jydd': '就业大队'
         }[filetype]
-        self.htmlfile = open(f'view/{year}/{filetype}/{month}.html', 'w')
+        self.htmlfile = open(f'view/{year}/{filetype}/{month}.html','w',encoding='utf-8')
         self.headCol = ''
 
     def xls_template_init(self):
