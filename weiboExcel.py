@@ -52,7 +52,7 @@ class Weibo_spider:
         self.totalPageNum = page
         # 内容关键字
         if excel_type == 'xqxz':
-            self.keyWord = '#消除就业性别歧视##粉丝投稿#'
+            self.keyWord = '消歧投稿'
         elif excel_type == 'hwzs':
             self.keyWord = f'海外之声 {year}.{month}'
         elif excel_type == 'jydd':
