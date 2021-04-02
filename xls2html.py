@@ -85,6 +85,7 @@ class Xls2HTML:
 # 就业大队 jydd
 # 消歧小组 xqxz
 # 海外之声 hwzs
+# 举报回复 jbhf
 year = sys.argv[1]
 month = sys.argv[2]
 spider_type = sys.argv[3]

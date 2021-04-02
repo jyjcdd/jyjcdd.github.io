@@ -22,13 +22,16 @@ class Weibo_spider:
         # 消歧小组
         'xqxz': '序号 发布日期 发布时间 微博链接 招录单位 招聘岗位 岗位要求 招聘链接 阅读量 转发 评论 点赞 评论内容',
         # 海外之声 （新增 来源 翻译
-        'hwzs': '序号 发布日期 发布时间 微博链接 国家 内容 来源 翻译 阅读量 转发 评论 点赞 评论内容'
+        'hwzs': '序号 发布日期 发布时间 微博链接 国家 内容 来源 翻译 阅读量 转发 评论 点赞 评论内容',
+        # 举报回复
+        'jbhf': '序号 发布日期 发布时间 微博链接 回复主体 回复内容 前情链接 招录单位 招聘岗位 岗位要求 全部内容 阅读量 转发 评论 点赞 评论内容'
     }
     # Excel文件名
     excelName = {
         'jydd': '就业大队',
         'xqxz': '消歧小组',
-        'hwzs': '海外之声'
+        'hwzs': '海外之声',
+        'jbhf': '举报回复'
     }
 
     def __init__(self, excel_type, year, month, page, username, password, instance):
@@ -57,6 +60,8 @@ class Weibo_spider:
             self.keyWord = f'海外之声 {year}.{month}'
         elif excel_type == 'jydd':
             self.keyWord = ''
+        elif excel_type == 'jbhf':
+            self.keyWord = '#举报回复#'
 
         # 爬虫
         self.driver = webdriver.Chrome()
@@ -336,6 +341,38 @@ class Weibo_spider:
 
             except:
                 self.cur_data.append(full_text)
+        
+        elif self.excelType == 'jbhf':
+            try:
+                #回复主体&回复内容
+                full_text_list = full_text.split('【')[1].split('】')[0].split('：')
+                self.cur_data.append(full_text_list[0])
+                self.cur_data.append(full_text_list[1])
+                try:
+                    #前情链接 代改
+                    pre_link = re.search('前情：',full_text).split('\n')[0]
+                    self.cur_data.append(pre_link)
+                    try:
+                        #单位|岗位|要求
+                        regObj = re.search('举报(.*?)。', full_text)
+                        # 按照中文逗号分隔信息
+                        job_text_list = regObj.group(1).split('，')
+                        for i in range(3):
+                            job_text = job_text_list[i]
+                            if i == 0:
+                                self.cur_data.append(job_text)
+                            else:
+                                # 把文本中的 招聘|要求 去掉
+                                job_text = job_text[2:]
+                                self.cur_data.append(job_text)
+                    except:
+                        self.cur_data.append(full_text)
+                except:
+                    self.cur_data.append(full_text)
+            except:
+                self.cur_data.append(full_text)
+
+
 
     # 获取点赞数等
     def __spider_evaluations(self, ele):
