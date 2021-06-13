@@ -30,8 +30,11 @@ class Weibo_spider:
         self.username = username
         self.password = password
         # 页面信息
-        self.homeUrl = 'https://weibo.com/u/5327831786/home'
-        self.baseUrl = f'https://weibo.com/5327831786/profile?is_all=1&stat_date={year}{month}'
+        ##self.homeUrl = 'https://weibo.com/u/5327831786/home'
+        ##self.baseUrl = f'https://weibo.com/5327831786/profile?is_all=1&stat_date={year}{month}'
+        #煎茶小队
+        self.homeUrl = 'https://weibo.com/u/7403993086/home'
+        self.baseUrl = f'https://weibo.com/7403993086/profile?is_all=1&stat_date={year}{month}'
         self.totalPageNum = page
         # 内容关键字
         if word_type == 'hwzs':
