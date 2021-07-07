@@ -300,25 +300,28 @@ class Weibo_spider:
                     self.cur_data.append('无')
 
         elif self.excelType == 'hwzs':
-            full_text_list = full_text.split('【')[1]
-            full_text_list = full_text_list.split('】')
-            self.cur_data.append(full_text_list[0])
-            # 来源 翻译
-            full_text_blankLine = full_text_list[1].split('\n\n')
-            last_blankLine = full_text_blankLine[-1]
-            if last_blankLine[0] == '（' and last_blankLine[-1] == '）':
-                self.cur_data.append('\n\n'.join(full_text_blankLine[0:-1]))
-                # 去除 （）
-                last_blankLine = last_blankLine[1:-1]
-                # 分隔来源和翻译
-                full_text_originAndTrans = last_blankLine.split('；')
-                for item in full_text_originAndTrans:
-                    name, con = item.split('：')
-                    self.cur_data.append(con.replace('\n', '').replace('\r', ''))
-            else:
-                self.cur_data.append(full_text_list[1])
-                self.cur_data.append('无')
-                self.cur_data.append('无')
+            try:
+                full_text_list = full_text.split('【')[1]
+                full_text_list = full_text_list.split('】')
+                self.cur_data.append(full_text_list[0])
+                # 来源 翻译
+                full_text_blankLine = full_text_list[1].split('\n\n')
+                last_blankLine = full_text_blankLine[-1]
+                if last_blankLine[0] == '（' and last_blankLine[-1] == '）':
+                    self.cur_data.append('\n\n'.join(full_text_blankLine[0:-1]))
+                    # 去除 （）
+                    last_blankLine = last_blankLine[1:-1]
+                    # 分隔来源和翻译
+                    full_text_originAndTrans = last_blankLine.split('；')
+                    for item in full_text_originAndTrans:
+                        name, con = item.split('：')
+                        self.cur_data.append(con.replace('\n', '').replace('\r', ''))
+                else:
+                    self.cur_data.append(full_text_list[1])
+                    self.cur_data.append('无')
+                    self.cur_data.append('无')
+            except:
+                self.cur_data.append('转发 无内容')
 
         elif self.excelType == 'jydd':
             try:
