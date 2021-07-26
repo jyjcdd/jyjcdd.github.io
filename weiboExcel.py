@@ -44,16 +44,18 @@ class Weibo_spider:
         self.username = username
         self.password = password
         # 页面信息
-        if instance == 'xcjb':
-            # 消除家暴
-            self.homeUrl = 'https://weibo.com/u/7400325540/home'
-            self.baseUrl = f'https://weibo.com/7400325540/profile?is_all=1&stat_date={year}{month}'
+        if excel_type == 'jbhf':
+            self.homeUrl = 'https://weibo.com/u/5327831786/home'
+            self.baseUrl = 'https://weibo.com/5327831786/profile?is_all=1&is_search=1&key_word=%23举报回复%23'
+        elif excel_type == 'hwzs':
+            #self.homeUrl = 'https://weibo.com/u/5327831786/home'
+            #self.baseUrl = f'https://weibo.com/5327831786/profile?is_all=1&stat_date={year}{month}'
+            #煎茶小队
+            self.homeUrl = 'https://weibo.com/u/7403993086/home'
+            self.baseUrl = f'https://weibo.com/7403993086/profile?is_all=1&stat_date={year}{month}'
         else:
             self.homeUrl = 'https://weibo.com/u/5327831786/home'
             self.baseUrl = f'https://weibo.com/5327831786/profile?is_all=1&stat_date={year}{month}'
-            #煎茶小队
-            #self.homeUrl = 'https://weibo.com/u/7403993086/home'
-            #self.baseUrl = f'https://weibo.com/7403993086/profile?is_all=1&stat_date={year}{month}'
 
         self.totalPageNum = page
         # 内容关键字
@@ -61,10 +63,10 @@ class Weibo_spider:
             self.keyWord = '消歧投稿'
         elif excel_type == 'hwzs':
             self.keyWord = f'海外之声 {year}.{month}'
-        elif excel_type == 'jydd':
+        elif excel_type == 'jydd' or excel_type == 'jbhf':
             self.keyWord = ''
-        elif excel_type == 'jbhf':
-            self.keyWord = '#举报回复#'
+        #elif excel_type == 'jbhf':
+        #   self.keyWord = '#举报回复#'
 
         # 爬虫
         self.driver = webdriver.Chrome()
@@ -354,28 +356,46 @@ class Weibo_spider:
                 full_text_list = full_text.split('【')[1].split('】')[0].split('：')
                 self.cur_data.append(full_text_list[0])
                 self.cur_data.append(full_text_list[1])
+                part_text = full_text.split('前情')[1]
                 try:
                     #前情链接 代改
-                    pre_link = re.search('前情：',full_text).split('\n')[0]
-                    self.cur_data.append(pre_link)
+                    try:
+                        pre_link = full_text_ele.find_element_by_css_selector("a[title='就业性别歧视监察大队']")
+                    except:
+                        pre_link = full_text_ele.find_element_by_css_selector('a[title][href]')
+                    #print(pre_link)
+                    #pre_link = re.search('前情：',full_text).split('\n')[0]
+                    pre_href = pre_link.get_attribute('href')
+                    #print(pre_href)
+                    self.cur_data.append(pre_href)
                     try:
                         #单位|岗位|要求
-                        regObj = re.search('举报(.*?)。', full_text)
+                        regObj = re.search('举报(.*?)。', part_text)
                         # 按照中文逗号分隔信息
                         job_text_list = regObj.group(1).split('，')
                         for i in range(3):
                             job_text = job_text_list[i]
-                            if i == 0:
+                            if i == 1:
+                                 # 把文本中的 招聘 去掉
+                                job_text = job_text[2:]
                                 self.cur_data.append(job_text)
                             else:
                                 # 把文本中的 招聘|要求 去掉
-                                job_text = job_text[2:]
+                                #job_text = job_text[2:]
                                 self.cur_data.append(job_text)
+                        self.cur_data.append(full_text)
                     except:
+                        for i in range(3):
+                            self.cur_data.append('')
                         self.cur_data.append(full_text)
                 except:
+                    for i in range(4):
+                        self.cur_data.append('')
+                    print("爬取前情链接失败！！")
                     self.cur_data.append(full_text)
             except:
+                for i in range(6):
+                    self.cur_data.append('')
                 self.cur_data.append(full_text)
 
 
