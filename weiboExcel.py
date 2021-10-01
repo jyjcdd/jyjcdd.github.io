@@ -358,7 +358,7 @@ class Weibo_spider:
                 self.cur_data.append(full_text_list[1])
                 part_text = full_text.split('前情')[1]
                 try:
-                    #前情链接 代改
+                    #前情链接 待改
                     try:
                         pre_link = full_text_ele.find_element_by_css_selector("a[title='就业性别歧视监察大队']")
                     except:
