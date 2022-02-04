@@ -45,8 +45,8 @@ class Weibo_spider:
         self.password = password
         # 页面信息
         if excel_type == 'jbhf':
-            self.homeUrl = 'https://weibo.com/u/5327831786/home'
-            self.baseUrl = 'https://weibo.com/5327831786/profile?is_all=1&is_search=1&key_word=%23举报回复%23'
+            self.homeUrl = 'https://weibo.com/u/7722146918/home'
+            self.baseUrl = 'https://weibo.com/7722146918/profile?is_all=1&is_search=1&key_word=%23举报回复%23'
         elif excel_type == 'hwzs':
             #self.homeUrl = 'https://weibo.com/u/5327831786/home'
             #self.baseUrl = f'https://weibo.com/5327831786/profile?is_all=1&stat_date={year}{month}'
@@ -54,13 +54,13 @@ class Weibo_spider:
             self.homeUrl = 'https://weibo.com/u/7403993086/home'
             self.baseUrl = f'https://weibo.com/7403993086/profile?is_all=1&stat_date={year}{month}'
         else:
-            self.homeUrl = 'https://weibo.com/u/5327831786/home'
-            self.baseUrl = f'https://weibo.com/5327831786/profile?is_all=1&stat_date={year}{month}'
+            self.homeUrl = 'https://weibo.com/u/7722146918/home'
+            self.baseUrl = f'https://weibo.com/7722146918/profile?is_all=1&stat_date={year}{month}'
 
         self.totalPageNum = page
         # 内容关键字
         if excel_type == 'xqxz':
-            self.keyWord = '消歧投稿'
+            self.keyWord = '#消歧投稿#'
         elif excel_type == 'hwzs':
             self.keyWord = f'海外之声 {year}.{month}'
         elif excel_type == 'jydd' or excel_type == 'jbhf':
@@ -281,7 +281,7 @@ class Weibo_spider:
 
         if self.excelType == 'xqxz':
             try:
-                regObj = re.search('举报(.*?)。', full_text)
+                regObj = re.search('投稿(.*?)。', full_text)
                 # 按照中文逗号分隔信息
                 job_text_list = regObj.group(1).split('，')
                 for i in range(3):
