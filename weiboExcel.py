@@ -124,31 +124,34 @@ class Weibo_spider:
         self.driver.implicitly_wait(10)
         self.driver.get('https://weibo.com')
         time.sleep(5)
-        # 登录账号
-        user_input = self.driver.find_element_by_id('loginname')
-        user_input.send_keys(self.username)
-        psd_input = self.driver.find_element_by_css_selector(
-            '.password .W_input')
-        psd_input.send_keys(self.password)
-        # 点击登录按钮
-        submit_btn = self.driver.find_element_by_css_selector(
-            '.W_btn_a.btn_32px')
-        time.sleep(1)
-        submit_btn.click()
-        try:
-            vail_input = self.driver.find_element_by_css_selector(
-                '[node-type="verifycode"]')
-            vail_input.send_keys('')
-            print('请输入验证码...')
-            time.sleep(3)
-            while True:
-                if self.driver.current_url != self.homeUrl:
-                    time.sleep(1)
-                else:
-                    break
-        except:
-            # 等待网页加载
-            time.sleep(3)
+        try:#旧版页面可以做这个尝试
+            # 登录账号
+            user_input = self.driver.find_element_by_id('loginname')
+            user_input.send_keys(self.username)
+            psd_input = self.driver.find_element(
+                '.password .W_input')
+            psd_input.send_keys(self.password)
+            # 点击登录按钮
+            submit_btn = self.driver.find_element(
+                '.W_btn_a.btn_32px')
+            time.sleep(1)
+            submit_btn.click()
+            try:
+                vail_input = self.driver.find_element(
+                    '[node-type="verifycode"]')
+                vail_input.send_keys('')
+                print('请输入验证码...')
+                time.sleep(3)
+                while True:
+                    if self.driver.current_url != self.homeUrl:
+                        time.sleep(1)
+                    else:
+                        break
+            except:
+                # 等待网页加载
+                time.sleep(3)
+        except:#新版就要等我扫码登陆
+            time.sleep(15)
 
     # 将滚动条移动到页面的底部
     def scroll_page(self):
@@ -167,13 +170,13 @@ class Weibo_spider:
             next_height = self.driver.execute_script(scroll_height_js)
             try:
                 # 比较滚动前后高度 若已经到底最退出循环
-                pre_text = self.driver.find_element_by_css_selector(
+                pre_text = self.driver.find_element(
                     '.page.prev').text
                 if pre_text == '上一页' or pre_text == '上一頁':
                     break
             except:
                 try:
-                    next_text = self.driver.find_element_by_css_selector(
+                    next_text = self.driver.find_element(
                         '.page.next').text
                     if next_text == '下一页' or next_text == '下一頁':
                         break
@@ -201,7 +204,7 @@ class Weibo_spider:
 
     # 获取日期和时间 & 微博链接
     def __spider_date(self, ele):
-        ele_time = ele.find_element_by_css_selector(
+        ele_time = ele.find_element(
             '.WB_from [node-type="feed_list_item_date"]')
         date_list = ele_time.text.split(' ')
         # 尝试获取日期和时间，若报错，则代表是 今天且是一小时内
@@ -232,7 +235,7 @@ class Weibo_spider:
         has_full_text_num = 3
         while has_full_text_num > 0 and not has_full_text:
             try:
-                full_text_ele = ele.find_element_by_css_selector(
+                full_text_ele = ele.find_element(
                     '.WB_text_opt[action-type="fl_unfold"]')
                 has_full_text = True
                 # 展开全文
@@ -266,16 +269,16 @@ class Weibo_spider:
     # 抓取文案内容
     def __spider_content(self, ele):
         # 展开全文
-        text_ele = ele.find_element_by_css_selector('.WB_text')
+        text_ele = ele.find_element('.WB_text')
         self.__spider_full_text(text_ele)
         try:
             # 展开全文
-            full_text_ele = ele.find_element_by_css_selector(
+            full_text_ele = ele.find_element(
                 '[node-type="feed_list_content_full"]')
             full_text = full_text_ele.text[:-5]  # 去除收起全文
         except:
             # 无展开全文
-            full_text_ele = ele.find_element_by_css_selector(
+            full_text_ele = ele.find_element(
                 '[node-type="feed_list_content"]')
             full_text = full_text_ele.text
 
@@ -327,20 +330,20 @@ class Weibo_spider:
 
         elif self.excelType == 'jydd':
             try:
-                expand_ele = ele.find_element_by_css_selector('.WB_expand')
-                expand_ele_title = expand_ele.find_element_by_css_selector(
+                expand_ele = ele.find_element('.WB_expand')
+                expand_ele_title = expand_ele.find_element(
                     '.WB_info a').text
-                expand_ele_text = expand_ele.find_element_by_css_selector(
+                expand_ele_text = expand_ele.find_element(
                     '.WB_text')
                 self.__spider_full_text(expand_ele_text)
                 try:
                     # 展开全文
-                    expand_full_text_ele = expand_ele.find_element_by_css_selector(
+                    expand_full_text_ele = expand_ele.find_element(
                         '[node-type="feed_list_reason_full"]')
                     expand_full_text = expand_full_text_ele.text[:-5]  # 去除收起全文
                 except:
                     # 无展开全文
-                    expand_full_text_ele = expand_ele.find_element_by_css_selector(
+                    expand_full_text_ele = expand_ele.find_element(
                         '[node-type="feed_list_reason"]')
                     expand_full_text = expand_full_text_ele.text
 
@@ -360,9 +363,9 @@ class Weibo_spider:
                 try:
                     #前情链接 待改
                     try:
-                        pre_link = full_text_ele.find_element_by_css_selector("a[title='就业性别歧视监察大队']")
+                        pre_link = full_text_ele.find_element("a[title='就业性别歧视监察大队']")
                     except:
-                        pre_link = full_text_ele.find_element_by_css_selector('a[title][href]')
+                        pre_link = full_text_ele.find_element('a[title][href]')
                     #print(pre_link)
                     #pre_link = re.search('前情：',full_text).split('\n')[0]
                     pre_href = pre_link.get_attribute('href')
@@ -402,7 +405,7 @@ class Weibo_spider:
 
     # 获取点赞数等
     def __spider_evaluations(self, ele):
-        data_line = ele.find_element_by_css_selector('.WB_row_line')
+        data_line = ele.find_element('.WB_row_line')
         data_lis = data_line.find_elements_by_css_selector('li')
         num = 0
 
@@ -432,7 +435,7 @@ class Weibo_spider:
     # 获取阅读数
     def __spider_read_num(self, ele):
         try:
-            read_num_str = ele.find_element_by_css_selector('i.S_txt2').text
+            read_num_str = ele.find_element('i.S_txt2').text
             read_num = read_num_str.split(' ')[1]
         except:
             read_num = '无'
@@ -442,10 +445,10 @@ class Weibo_spider:
     # 转发数|评论数|点赞数
     def __spider_evaluations_num(self, ele, evaluationsType):
         try:
-            evaluations_num = ele.find_element_by_css_selector('em+em').text
+            evaluations_num = ele.find_element('em+em').text
         except:
             try:
-                evaluations_num = ele.find_element_by_css_selector(
+                evaluations_num = ele.find_element(
                     '.WB_row_line li .icon_att_like+em').text
             except:
                 evaluations_num = '无'
@@ -530,9 +533,9 @@ class Weibo_spider:
             elements = self.driver.find_elements_by_css_selector(
                 '.WB_cardwrap.WB_feed_type')
             for ele in elements:
-                detail_ele = ele.find_element_by_css_selector(
+                detail_ele = ele.find_element(
                     '.WB_feed_detail')
-                text_ele = detail_ele.find_element_by_css_selector('.WB_text')
+                text_ele = detail_ele.find_element('.WB_text')
                 if self.keyWord in text_ele.text:
                     self.cur_data = []
                     # 抓取时间 & 微博原文链接
