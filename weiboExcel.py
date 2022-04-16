@@ -12,7 +12,7 @@ import datetime
 from xlwt import Workbook
 from xlrd import open_workbook
 from xlutils.copy import copy
-
+from selenium.webdriver.common.by import By
 
 class Weibo_spider:
     # Excel文件的标头
@@ -53,6 +53,9 @@ class Weibo_spider:
             #煎茶小队
             self.homeUrl = 'https://weibo.com/u/7403993086/home'
             self.baseUrl = f'https://weibo.com/7403993086/profile?is_all=1&stat_date={year}{month}'
+        elif excel_type == 'jydd':
+            self.homeUrl = 'https://weibo.com/u/5327831786/home'
+            self.baseUrl = f'https://weibo.com/5327831786/profile?is_all=1&stat_date={year}{month}'
         else:
             self.homeUrl = 'https://weibo.com/u/7722146918/home'
             self.baseUrl = f'https://weibo.com/7722146918/profile?is_all=1&stat_date={year}{month}'
@@ -126,19 +129,19 @@ class Weibo_spider:
         time.sleep(5)
         try:#旧版页面可以做这个尝试
             # 登录账号
-            user_input = self.driver.find_element_by_id('loginname')
+            user_input = self.driver.find_element(By.id,'loginname')
             user_input.send_keys(self.username)
             psd_input = self.driver.find_element(
-                '.password .W_input')
+                By.CSS_SELECTOR,'.password .W_input')
             psd_input.send_keys(self.password)
             # 点击登录按钮
             submit_btn = self.driver.find_element(
-                '.W_btn_a.btn_32px')
+                By.CSS_SELECTOR,'.W_btn_a.btn_32px')
             time.sleep(1)
             submit_btn.click()
             try:
                 vail_input = self.driver.find_element(
-                    '[node-type="verifycode"]')
+                    By.CSS_SELECTOR,'[node-type="verifycode"]')
                 vail_input.send_keys('')
                 print('请输入验证码...')
                 time.sleep(3)
@@ -171,13 +174,13 @@ class Weibo_spider:
             try:
                 # 比较滚动前后高度 若已经到底最退出循环
                 pre_text = self.driver.find_element(
-                    '.page.prev').text
+                    By.CSS_SELECTOR,'.page.prev').text
                 if pre_text == '上一页' or pre_text == '上一頁':
                     break
             except:
                 try:
                     next_text = self.driver.find_element(
-                        '.page.next').text
+                        By.CSS_SELECTOR,'.page.next').text
                     if next_text == '下一页' or next_text == '下一頁':
                         break
                 except:
@@ -205,7 +208,7 @@ class Weibo_spider:
     # 获取日期和时间 & 微博链接
     def __spider_date(self, ele):
         ele_time = ele.find_element(
-            '.WB_from [node-type="feed_list_item_date"]')
+            By.CSS_SELECTOR,'.WB_from [node-type="feed_list_item_date"]')
         date_list = ele_time.text.split(' ')
         # 尝试获取日期和时间，若报错，则代表是 今天且是一小时内
         try:
@@ -236,7 +239,7 @@ class Weibo_spider:
         while has_full_text_num > 0 and not has_full_text:
             try:
                 full_text_ele = ele.find_element(
-                    '.WB_text_opt[action-type="fl_unfold"]')
+                    By.CSS_SELECTOR,'.WB_text_opt[action-type="fl_unfold"]')
                 has_full_text = True
                 # 展开全文
                 full_text_click_num = 5
@@ -269,17 +272,17 @@ class Weibo_spider:
     # 抓取文案内容
     def __spider_content(self, ele):
         # 展开全文
-        text_ele = ele.find_element('.WB_text')
+        text_ele = ele.find_element(By.CSS_SELECTOR,'.WB_text')
         self.__spider_full_text(text_ele)
         try:
             # 展开全文
             full_text_ele = ele.find_element(
-                '[node-type="feed_list_content_full"]')
+                By.CSS_SELECTOR,'[node-type="feed_list_content_full"]')
             full_text = full_text_ele.text[:-5]  # 去除收起全文
         except:
             # 无展开全文
             full_text_ele = ele.find_element(
-                '[node-type="feed_list_content"]')
+                By.CSS_SELECTOR,'[node-type="feed_list_content"]')
             full_text = full_text_ele.text
 
         if self.excelType == 'xqxz':
@@ -330,21 +333,21 @@ class Weibo_spider:
 
         elif self.excelType == 'jydd':
             try:
-                expand_ele = ele.find_element('.WB_expand')
+                expand_ele = ele.find_element(By.CSS_SELECTOR,'.WB_expand')
                 expand_ele_title = expand_ele.find_element(
-                    '.WB_info a').text
+                    By.CSS_SELECTOR,'.WB_info a').text
                 expand_ele_text = expand_ele.find_element(
-                    '.WB_text')
+                    By.CSS_SELECTOR,'.WB_text')
                 self.__spider_full_text(expand_ele_text)
                 try:
                     # 展开全文
                     expand_full_text_ele = expand_ele.find_element(
-                        '[node-type="feed_list_reason_full"]')
+                        By.CSS_SELECTOR,'[node-type="feed_list_reason_full"]')
                     expand_full_text = expand_full_text_ele.text[:-5]  # 去除收起全文
                 except:
                     # 无展开全文
                     expand_full_text_ele = expand_ele.find_element(
-                        '[node-type="feed_list_reason"]')
+                        By.CSS_SELECTOR,'[node-type="feed_list_reason"]')
                     expand_full_text = expand_full_text_ele.text
 
                 full_text = full_text + '\n' + expand_ele_title + '\n' + expand_full_text
@@ -363,9 +366,9 @@ class Weibo_spider:
                 try:
                     #前情链接 待改
                     try:
-                        pre_link = full_text_ele.find_element("a[title='就业性别歧视监察大队']")
+                        pre_link = full_text_ele.find_element(By.CSS_SELECTOR,"a[title='就业性别歧视监察大队']")
                     except:
-                        pre_link = full_text_ele.find_element('a[title][href]')
+                        pre_link = full_text_ele.find_element(By.CSS_SELECTOR,'a[title][href]')
                     #print(pre_link)
                     #pre_link = re.search('前情：',full_text).split('\n')[0]
                     pre_href = pre_link.get_attribute('href')
@@ -405,8 +408,8 @@ class Weibo_spider:
 
     # 获取点赞数等
     def __spider_evaluations(self, ele):
-        data_line = ele.find_element('.WB_row_line')
-        data_lis = data_line.find_elements_by_css_selector('li')
+        data_line = ele.find_element(By.CSS_SELECTOR,'.WB_row_line')
+        data_lis = data_line.find_elements(By.CSS_SELECTOR,'li')
         num = 0
 
         # 获取阅读数
@@ -435,7 +438,7 @@ class Weibo_spider:
     # 获取阅读数
     def __spider_read_num(self, ele):
         try:
-            read_num_str = ele.find_element('i.S_txt2').text
+            read_num_str = ele.find_element(By.CSS_SELECTOR,'i.S_txt2').text
             read_num = read_num_str.split(' ')[1]
         except:
             read_num = '无'
@@ -445,11 +448,11 @@ class Weibo_spider:
     # 转发数|评论数|点赞数
     def __spider_evaluations_num(self, ele, evaluationsType):
         try:
-            evaluations_num = ele.find_element('em+em').text
+            evaluations_num = ele.find_element(By.CSS_SELECTOR,'em+em').text
         except:
             try:
                 evaluations_num = ele.find_element(
-                    '.WB_row_line li .icon_att_like+em').text
+                    By.CSS_SELECTOR,'.WB_row_line li .icon_att_like+em').text
             except:
                 evaluations_num = '无'
 
@@ -475,8 +478,8 @@ class Weibo_spider:
                 clickEle.click()
                 # 回复评论
                 time.sleep(5)
-                replay_list = ele.find_elements_by_css_selector(
-                    '.repeat_list [node-type="replywrap"]>.WB_text')
+                replay_list = ele.find_elements(
+                    By.CSS_SELECTOR,'.repeat_list [node-type="replywrap"]>.WB_text')
                 time.sleep(1)
                 if len(replay_list) > 0:
                     for replay in replay_list:
@@ -530,12 +533,12 @@ class Weibo_spider:
             # 滚动
             self.scroll_page()
             # 抓取数据
-            elements = self.driver.find_elements_by_css_selector(
-                '.WB_cardwrap.WB_feed_type')
+            elements = self.driver.find_elements(
+                By.CSS_SELECTOR,'.WB_cardwrap.WB_feed_type')
             for ele in elements:
                 detail_ele = ele.find_element(
-                    '.WB_feed_detail')
-                text_ele = detail_ele.find_element('.WB_text')
+                    By.CSS_SELECTOR,'.WB_feed_detail')
+                text_ele = detail_ele.find_element(By.CSS_SELECTOR,'.WB_text')
                 if self.keyWord in text_ele.text:
                     self.cur_data = []
                     # 抓取时间 & 微博原文链接
