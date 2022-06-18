@@ -47,12 +47,12 @@ class Weibo_spider:
         if excel_type == 'jbhf':
             self.homeUrl = 'https://weibo.com/u/7722146918/home'
             self.baseUrl = 'https://weibo.com/7722146918/profile?is_all=1&is_search=1&key_word=%23举报回复%23'
-        elif excel_type == 'hwzs':
-            #self.homeUrl = 'https://weibo.com/u/5327831786/home'
-            #self.baseUrl = f'https://weibo.com/5327831786/profile?is_all=1&stat_date={year}{month}'
-            #煎茶小队
-            self.homeUrl = 'https://weibo.com/u/7403993086/home'
-            self.baseUrl = f'https://weibo.com/7403993086/profile?is_all=1&stat_date={year}{month}'
+        # elif excel_type == 'hwzs':
+        #     #self.homeUrl = 'https://weibo.com/u/5327831786/home'
+        #     #self.baseUrl = f'https://weibo.com/5327831786/profile?is_all=1&stat_date={year}{month}'
+        #     #煎茶小队
+        #     self.homeUrl = 'https://weibo.com/u/7403993086/home'
+        #     self.baseUrl = f'https://weibo.com/7403993086/profile?is_all=1&stat_date={year}{month}'
         elif excel_type == 'jydd':
             self.homeUrl = 'https://weibo.com/u/5327831786/home'
             self.baseUrl = f'https://weibo.com/5327831786/profile?is_all=1&stat_date={year}{month}'

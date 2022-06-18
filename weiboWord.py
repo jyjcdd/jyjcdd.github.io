@@ -33,8 +33,8 @@ class Weibo_spider:
         #self.homeUrl = 'https://weibo.com/u/5327831786/home'
         #self.baseUrl = f'https://weibo.com/5327831786/profile?is_all=1&stat_date={year}{month}'
         #煎茶小队
-        self.homeUrl = 'https://weibo.com/u/7403993086/home'
-        self.baseUrl = f'https://weibo.com/7403993086/profile?is_all=1&stat_date={year}{month}'
+        self.homeUrl = 'https://weibo.com/u/7722146918/home'
+        self.baseUrl = f'https://weibo.com/7722146918/profile?is_all=1&stat_date={year}{month}'
         self.totalPageNum = page
         # 内容关键字
         if word_type == 'hwzs':
@@ -84,33 +84,36 @@ class Weibo_spider:
         self.driver.implicitly_wait(10)
         self.driver.get('https://weibo.com')
         time.sleep(7)
-        # 登录账号
-        user_input = self.driver.find_element_by_id('loginname')
-        user_input.send_keys(self.username)
-        psd_input = self.driver.find_element_by_css_selector(
-            '.password .W_input')
-        psd_input.send_keys(self.password)
-        # 点击登录按钮
-        submit_btn = self.driver.find_element_by_css_selector(
-            '.W_btn_a.btn_32px')
-        time.sleep(1)
-        submit_btn.click()
-
         try:
-            vail_input = self.driver.find_element_by_css_selector(
-                '[node-type="verifycode"]')
-            vail_input.send_keys('')
-            print('请输入验证码...')
-            time.sleep(3)
+            # 登录账号
+            user_input = self.driver.find_element_by_id('loginname')
+            user_input.send_keys(self.username)
+            psd_input = self.driver.find_element_by_css_selector(
+                '.password .W_input')
+            psd_input.send_keys(self.password)
+            # 点击登录按钮
+            submit_btn = self.driver.find_element_by_css_selector(
+                '.W_btn_a.btn_32px')
+            time.sleep(1)
+            submit_btn.click()
 
-            while True:
-                if self.driver.current_url != self.homeUrl:
-                    time.sleep(1)
-                else:
-                    break
+            try:
+                vail_input = self.driver.find_element_by_css_selector(
+                    '[node-type="verifycode"]')
+                vail_input.send_keys('')
+                print('请输入验证码...')
+                time.sleep(3)
+
+                while True:
+                    if self.driver.current_url != self.homeUrl:
+                        time.sleep(1)
+                    else:
+                        break
+            except:
+                # 等待网页加载
+                time.sleep(3)
         except:
-            # 等待网页加载
-            time.sleep(3)
+            time.sleep(15)
 
 
     # 将滚动条移动到页面的底部
