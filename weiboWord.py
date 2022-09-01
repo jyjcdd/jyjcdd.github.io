@@ -10,6 +10,7 @@ import re
 import sys
 from docx import Document
 from docx.oxml.ns import qn
+from selenium.webdriver.common.by import By
 
 
 class Weibo_spider:
@@ -83,27 +84,25 @@ class Weibo_spider:
         # 访问微博首页
         self.driver.implicitly_wait(10)
         self.driver.get('https://weibo.com')
-        time.sleep(7)
-        try:
+        time.sleep(5)
+        try:#旧版页面可以做这个尝试
             # 登录账号
-            user_input = self.driver.find_element_by_id('loginname')
+            user_input = self.driver.find_element(By.id,'loginname')
             user_input.send_keys(self.username)
-            psd_input = self.driver.find_element_by_css_selector(
-                '.password .W_input')
+            psd_input = self.driver.find_element(
+                By.CSS_SELECTOR,'.password .W_input')
             psd_input.send_keys(self.password)
             # 点击登录按钮
-            submit_btn = self.driver.find_element_by_css_selector(
-                '.W_btn_a.btn_32px')
+            submit_btn = self.driver.find_element(
+                By.CSS_SELECTOR,'.W_btn_a.btn_32px')
             time.sleep(1)
             submit_btn.click()
-
             try:
-                vail_input = self.driver.find_element_by_css_selector(
-                    '[node-type="verifycode"]')
+                vail_input = self.driver.find_element(
+                    By.CSS_SELECTOR,'[node-type="verifycode"]')
                 vail_input.send_keys('')
                 print('请输入验证码...')
                 time.sleep(3)
-
                 while True:
                     if self.driver.current_url != self.homeUrl:
                         time.sleep(1)
@@ -112,7 +111,7 @@ class Weibo_spider:
             except:
                 # 等待网页加载
                 time.sleep(3)
-        except:
+        except:#新版就要等我扫码登陆
             time.sleep(15)
 
 
@@ -133,11 +132,15 @@ class Weibo_spider:
             next_height = self.driver.execute_script(scroll_height_js)
             try:
                 # 比较滚动前后高度 若已经到底最退出循环
-                if self.driver.find_element_by_css_selector('.page.prev').text == '上一页':
+                pre_text = self.driver.find_element(
+                    By.CSS_SELECTOR,'.page.prev').text
+                if pre_text == '上一页' or pre_text == '上一頁':
                     break
             except:
                 try:
-                    if self.driver.find_element_by_css_selector('.page.next').text == '下一页':
+                    next_text = self.driver.find_element(
+                        By.CSS_SELECTOR,'.page.next').text
+                    if next_text == '下一页' or next_text == '下一頁':
                         break
                 except:
                     pass
@@ -168,8 +171,8 @@ class Weibo_spider:
         has_full_text_num = 3
         while has_full_text_num > 0 and not has_full_text:
             try:
-                full_text_ele = ele.find_element_by_css_selector(
-                    '.WB_text_opt[action-type="fl_unfold"]')
+                full_text_ele = ele.find_element(
+                    By.CSS_SELECTOR,'.WB_text_opt[action-type="fl_unfold"]')
                 has_full_text = True
                 # 展开全文
                 full_text_click_num = 5
@@ -202,26 +205,28 @@ class Weibo_spider:
     # 抓取文案内容
     def __spider_content(self, ele):
         # 展开全文
-        text_ele = ele.find_element_by_css_selector('.WB_text')
+        text_ele = ele.find_element(By.CSS_SELECTOR,'.WB_text')
         self.__spider_full_text(text_ele)
         try:
             # 展开全文
-            full_text_ele = ele.find_element_by_css_selector(
-                '[node-type="feed_list_content_full"]')
+            full_text_ele = ele.find_element(
+                By.CSS_SELECTOR,'[node-type="feed_list_content_full"]')
             full_text = full_text_ele.text[:-5]  # 去除收起全文
         except:
             # 无展开全文
-            full_text_ele = ele.find_element_by_css_selector(
-                '[node-type="feed_list_content"]')
+            full_text_ele = ele.find_element(
+                By.CSS_SELECTOR,'[node-type="feed_list_content"]')
             full_text = full_text_ele.text
 
         if self.wordType == 'hwzs':
             # 抓取图片信息
             try:
-                pics_ele = ele.find_elements_by_css_selector(
+                pics_ele = ele.find_elements(
+                    By.CSS_SELECTOR,
                     '.WB_detail>.WB_media_wrap .WB_media_a li')
                 for i in range(0, len(pics_ele) - 1):
-                    img_ele = pics_ele[i].find_element_by_css_selector(
+                    img_ele = pics_ele[i].find_element(
+                        By.CSS_SELECTOR,
                         'img')
                     full_text = full_text + '\n' + img_ele.get_attribute('src')
                     print(f'full_text:{full_text}')
@@ -259,12 +264,14 @@ class Weibo_spider:
             # 滚动
             self.scroll_page()
             # 抓取数据
-            elements = self.driver.find_elements_by_css_selector(
+            elements = self.driver.find_elements(
+                By.CSS_SELECTOR,
                 '.WB_cardwrap.WB_feed_type')
             for ele in elements:
-                detail_ele = ele.find_element_by_css_selector(
+                detail_ele = ele.find_element(
+                    By.CSS_SELECTOR,
                     '.WB_feed_detail')
-                text_ele = detail_ele.find_element_by_css_selector('.WB_text')
+                text_ele = detail_ele.find_element(By.CSS_SELECTOR,'.WB_text')
                 if self.keyWord in text_ele.text:
                     self.cur_data = []
                     # 抓取文案内容
