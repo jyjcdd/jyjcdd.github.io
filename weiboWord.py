@@ -130,20 +130,39 @@ class Weibo_spider:
             time.sleep(3)
             # 获取滚动之后的高度
             next_height = self.driver.execute_script(scroll_height_js)
+            # try:
+            #     # 比较滚动前后高度 若已经到底最退出循环
+            #     pre_text = self.driver.find_element(
+            #         By.CSS_SELECTOR,'.page.prev').text
+            #     if pre_text == '上一页' or pre_text == '上一頁':
+            #         break
+            # except:
+            #     try:
+            #         next_text = self.driver.find_element(
+            #             By.CSS_SELECTOR,'.page.next').text
+            #         if next_text == '下一页' or next_text == '下一頁':
+            #             break
+            #     except:
+            #         pass
             try:
                 # 比较滚动前后高度 若已经到底最退出循环
-                pre_text = self.driver.find_element(
-                    By.CSS_SELECTOR,'.page.prev').text
-                if pre_text == '上一页' or pre_text == '上一頁':
+                #js="return document.querySelectorAll('.more_txt')"
+                #wd为Webdirver
+                #more_text_list=self.driver.execute_script(js)
+                more_text_list = self.driver.find_elements(
+                    By.CSS_SELECTOR,'.more_txt')
+                print(more_text_list)
+                more_flag = False
+                for more_text in more_text_list:
+                    print(more_text.text)
+                    if more_text.text == '查看更早微博a':
+                        more_flag = True
+                        break
+                if more_flag:
                     break
             except:
-                try:
-                    next_text = self.driver.find_element(
-                        By.CSS_SELECTOR,'.page.next').text
-                    if next_text == '下一页' or next_text == '下一頁':
-                        break
-                except:
-                    pass
+                print("fail")
+                pass
 
         # 等待滚动完成
         time.sleep(1)
